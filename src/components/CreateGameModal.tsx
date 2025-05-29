@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } = useToast";
+import { useToast } from "@/hooks/use-toast";
 import { Tables } from "@/integrations/supabase/types";
 
 type Story = Tables<'stories'>;
