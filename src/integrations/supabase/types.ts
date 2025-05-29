@@ -9,16 +9,277 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      characters: {
+        Row: {
+          background: string
+          created_at: string | null
+          description: string
+          id: string
+          name: string
+          outfit: string
+          story_id: string
+        }
+        Insert: {
+          background: string
+          created_at?: string | null
+          description: string
+          id?: string
+          name: string
+          outfit: string
+          story_id: string
+        }
+        Update: {
+          background?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          name?: string
+          outfit?: string
+          story_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "characters_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clues: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_for_murderer: boolean | null
+          round_number: number
+          story_id: string
+          title: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_for_murderer?: boolean | null
+          round_number: number
+          story_id: string
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_for_murderer?: boolean | null
+          round_number?: number
+          story_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clues_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_players: {
+        Row: {
+          character_id: string
+          id: string
+          is_alive: boolean | null
+          joined_at: string | null
+          role: Database["public"]["Enums"]["player_role"]
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          character_id: string
+          id?: string
+          is_alive?: boolean | null
+          joined_at?: string | null
+          role: Database["public"]["Enums"]["player_role"]
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          character_id?: string
+          id?: string
+          is_alive?: boolean | null
+          joined_at?: string | null
+          role?: Database["public"]["Enums"]["player_role"]
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_players_character_id_fkey"
+            columns: ["character_id"]
+            isOneToOne: false
+            referencedRelation: "characters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "game_players_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "game_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_sessions: {
+        Row: {
+          created_at: string | null
+          current_round: number
+          host_id: string
+          id: string
+          max_rounds: number
+          password: string | null
+          session_code: string
+          status: Database["public"]["Enums"]["game_status"]
+          story_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_round?: number
+          host_id: string
+          id?: string
+          max_rounds?: number
+          password?: string | null
+          session_code: string
+          status?: Database["public"]["Enums"]["game_status"]
+          story_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_round?: number
+          host_id?: string
+          id?: string
+          max_rounds?: number
+          password?: string | null
+          session_code?: string
+          status?: Database["public"]["Enums"]["game_status"]
+          story_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_sessions_story_id_fkey"
+            columns: ["story_id"]
+            isOneToOne: false
+            referencedRelation: "stories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          id: string
+          updated_at?: string | null
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
+      stories: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          max_players: number
+          min_players: number
+          setting: string
+          title: string
+          total_rounds: number
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          max_players?: number
+          min_players?: number
+          setting: string
+          title: string
+          total_rounds?: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          max_players?: number
+          min_players?: number
+          setting?: string
+          title?: string
+          total_rounds?: number
+        }
+        Relationships: []
+      }
+      votes: {
+        Row: {
+          accused_id: string
+          created_at: string | null
+          id: string
+          session_id: string
+          voter_id: string
+        }
+        Insert: {
+          accused_id: string
+          created_at?: string | null
+          id?: string
+          session_id: string
+          voter_id: string
+        }
+        Update: {
+          accused_id?: string
+          created_at?: string | null
+          id?: string
+          session_id?: string
+          voter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votes_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "game_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_session_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
-      [_ in never]: never
+      game_status: "waiting" | "in_progress" | "voting" | "completed"
+      player_role: "detective" | "murderer"
+      round_type: "clue" | "voting" | "reveal"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +394,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      game_status: ["waiting", "in_progress", "voting", "completed"],
+      player_role: ["detective", "murderer"],
+      round_type: ["clue", "voting", "reveal"],
+    },
   },
 } as const
