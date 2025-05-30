@@ -128,6 +128,13 @@ export type Database = {
             referencedRelation: "game_sessions"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "game_players_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       game_sessions: {
@@ -168,6 +175,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "game_sessions_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "game_sessions_story_id_fkey"
             columns: ["story_id"]
@@ -258,10 +272,24 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "votes_accused_id_fkey"
+            columns: ["accused_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "votes_session_id_fkey"
             columns: ["session_id"]
             isOneToOne: false
             referencedRelation: "game_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "votes_voter_id_fkey"
+            columns: ["voter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -274,6 +302,10 @@ export type Database = {
       generate_session_code: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      user_in_session: {
+        Args: { _session_id: string; _user_id: string }
+        Returns: boolean
       }
     }
     Enums: {

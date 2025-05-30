@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
 import { Button } from "@/components/ui/button";
@@ -55,18 +54,40 @@ const GameLobby = ({ session: initialSession, player: initialPlayer, user, onLea
       setStory(storyData);
     }
 
-    // Fetch players with their profiles and characters
+    // Fetch players with their profiles and characters separately to avoid join issues
     const { data: playersData } = await supabase
       .from('game_players')
-      .select(`
-        *,
-        profile:profiles!inner(*),
-        character:characters!inner(*)
-      `)
+      .select('*')
       .eq('session_id', session.id);
 
     if (playersData) {
-      setPlayers(playersData);
+      // Fetch profiles and characters separately
+      const userIds = playersData.map(p => p.user_id);
+      const characterIds = playersData.map(p => p.character_id);
+
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', userIds);
+
+      const { data: characters } = await supabase
+        .from('characters')
+        .select('*')
+        .in('id', characterIds);
+
+      // Combine the data
+      const playersWithDetails = playersData.map(player => {
+        const profile = profiles?.find(p => p.id === player.user_id);
+        const character = characters?.find(c => c.id === player.character_id);
+        
+        return {
+          ...player,
+          profile: profile!,
+          character: character!
+        };
+      }).filter(p => p.profile && p.character);
+
+      setPlayers(playersWithDetails);
     }
   };
 
